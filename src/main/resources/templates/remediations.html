@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: header_tags}"></head>
+<body>
+    <nav th:replace="~{layout :: sidebar('remediations')}"></nav>
+    <div id="content-wrapper">
+        <header th:replace="~{layout :: top_navbar}"></header>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h3 class="fw-bold mb-1 text-slate-800">Corrective Action & Remediation Dispatch</h3>
+                <p class="text-secondary mb-0">Hardware repairs, inventory quarantines, sensor recalibrations and facility maintenance tracking</p>
+            </div>
+        </div>
+
+        <div class="table-card">
+            <div class="card-header">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-tools text-primary"></i>
+                    <span>Corrective Action Tasks</span>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light small">
+                        <tr>
+                            <th>Remediation ID</th>
+                            <th>Linked Alert</th>
+                            <th>Action Title</th>
+                            <th>Action Type</th>
+                            <th>Assigned Team</th>
+                            <th>Cost Impact</th>
+                            <th>Scheduled Date</th>
+                            <th>Status</th>
+                            <th>Resolution Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody class="small">
+                        <tr th:each="r : ${remediations.content}">
+                            <td class="fw-bold font-monospace text-primary" th:text="${r.id}">REM-01</td>
+                            <td class="font-monospace" th:text="${r.alertId}">ALM-01</td>
+                            <td class="fw-semibold" th:text="${r.actionTitle}">Condenser Vent Cleaning</td>
+                            <td>
+                                <span class="badge bg-light text-dark border" th:text="${r.actionType}">EQUIPMENT_REPAIR</span>
+                            </td>
+                            <td th:text="${r.assignedTo}">HVAC Maintenance Team</td>
+                            <td>
+                                <span class="fw-bold text-slate-900">$<span th:text="${#numbers.formatDecimal(r.costImpact, 1, 2)}">850.00</span></span>
+                            </td>
+                            <td class="text-muted" th:text="${#temporals.format(r.scheduledAt, 'yyyy-MM-dd HH:mm')}">2026-11-01 16:00</td>
+                            <td>
+                                <span class="badge-status" th:classappend="${r.status.name() == 'COMPLETED'} ? 'badge-normal' : (${r.status.name() == 'IN_PROGRESS'} ? 'badge-warning' : 'badge-critical')" th:text="${r.status}">COMPLETED</span>
+                            </td>
+                            <td class="text-truncate" style="max-width: 280px;" th:text="${r.resolutionNotes != null ? r.resolutionNotes : 'Pending task execution'}" th:title="${r.resolutionNotes}">Notes</td>
+                        </tr>
+                        <tr th:if="${remediations.content.empty}">
+                            <td colspan="9" class="text-center py-4 text-muted">No remediations logged.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- Pagination Controls -->
+            <div class="card-footer bg-white border-top p-3 d-flex justify-content-between align-items-center" th:if="${remediations.totalPages > 1}">
+                <span class="small text-muted">Page <span th:text="${remediations.number + 1}">1</span> of <span th:text="${remediations.totalPages}">5</span></span>
+                <ul class="pagination pagination-sm mb-0">
+                    <li class="page-item" th:classappend="${remediations.first} ? 'disabled' : ''">
+                        <a class="page-link" th:href="@{/remediations(page=${remediations.number - 1})}">Previous</a>
+                    </li>
+                    <li class="page-item" th:classappend="${remediations.last} ? 'disabled' : ''">
+                        <a class="page-link" th:href="@{/remediations(page=${remediations.number + 1})}">Next</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

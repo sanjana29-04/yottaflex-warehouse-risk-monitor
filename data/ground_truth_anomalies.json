@@ -1,0 +1,54 @@
+[
+  {
+    "id": "GT-0001",
+    "entity_type": "InventoryLot",
+    "entity_id": "LOT-2026-000001",
+    "related_id": "ZONE-WH-001-003",
+    "anomaly_type": "LOT_ASSIGNED_INCOMPATIBLE_ZONE",
+    "start_time": "2026-11-01T00:10:00.000Z",
+    "end_time": "2026-11-01T03:20:00.000Z",
+    "expected_decision": "QUARANTINE_AND_REASSIGN",
+    "ground_truth_label": "NEGATIVE_INCOMPATIBLE_ZONE_ALLOCATION",
+    "severity": "CRITICAL",
+    "description": "Lot LOT-2026-000001 requiring REQ-VACCINE (-25°C to -15°C) was misallocated to Ambient Zone ZONE-WH-001-003 (20°C)"
+  },
+  {
+    "id": "GT-0002",
+    "entity_type": "Sensor",
+    "entity_id": "SNS-ZONE-WH-001-001-TEMP-01",
+    "related_id": "ZONE-WH-001-002",
+    "anomaly_type": "SENSOR_MAPPED_MULTIPLE_ZONES",
+    "start_time": "2026-01-01T00:00:00.000Z",
+    "end_time": null,
+    "expected_decision": "INVALIDATE_TOPOLOGY_AUDIT_REQUIRED",
+    "ground_truth_label": "NEGATIVE_CONCURRENT_SENSOR_TOPOLOGY",
+    "severity": "HIGH",
+    "description": "Sensor SNS-ZONE-WH-001-001-TEMP-01 concurrently mapped to both ZONE-WH-001-001 and ZONE-WH-001-002 without decommissioning record or rationale"
+  },
+  {
+    "id": "GT-0003",
+    "entity_type": "SensorReading",
+    "entity_id": "SNS-ZONE-WH-001-001-HUM-01",
+    "related_id": "ZONE-WH-001-001",
+    "anomaly_type": "UNREPORTED_SENSOR_READING_GAP",
+    "start_time": "2026-11-01T01:12:00.000Z",
+    "end_time": "2026-11-01T01:22:00.000Z",
+    "expected_decision": "FLAG_SENSOR_OUTAGE_TRIGGER_DIAGNOSTIC",
+    "ground_truth_label": "NEGATIVE_SILENT_TELEMETRY_DROPOUT",
+    "severity": "MEDIUM",
+    "description": "Unreported reading gap of 10 intervals on Sensor SNS-ZONE-WH-001-001-HUM-01 between 2026-11-01T01:12:00.000Z and 2026-11-01T01:22:00.000Z"
+  },
+  {
+    "id": "GT-0004",
+    "entity_type": "Alarm",
+    "entity_id": "ALM-ZONE-WH-004-002-0001",
+    "related_id": "LOT-2026-000004",
+    "anomaly_type": "ALARM_NOT_LINKED_TO_AFFECTED_LOT",
+    "start_time": "2026-11-01T00:35:00.000Z",
+    "end_time": "2026-11-01T00:40:00.000Z",
+    "expected_decision": "RECONCILE_SPATIOTEMPORAL_TRACEABILITY",
+    "ground_truth_label": "NEGATIVE_TRACEABILITY_DISCONNECT",
+    "severity": "CRITICAL",
+    "description": "Alarm ALM-ZONE-WH-004-002-0001 occurred in Zone ZONE-WH-004-002 while Lot LOT-2026-000004 was dwelling, but AlarmLotImpact linkage was dropped"
+  }
+]

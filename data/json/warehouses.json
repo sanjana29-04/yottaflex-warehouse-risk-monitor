@@ -1,0 +1,91 @@
+[ {
+  "id" : "WH-001",
+  "name" : "OmniHub Distribution Center 1",
+  "location" : "Chicago, IL",
+  "capacitySqm" : 33387,
+  "totalZones" : 10,
+  "status" : "ACTIVE",
+  "createdAt" : [ 2026, 11, 13, 22, 50, 6, 459623000 ],
+  "updatedAt" : [ 2026, 11, 13, 22, 50, 6, 459623000 ]
+}, {
+  "id" : "WH-002",
+  "name" : "OmniHub Distribution Center 2",
+  "location" : "Dallas, TX",
+  "capacitySqm" : 28282,
+  "totalZones" : 10,
+  "status" : "ACTIVE",
+  "createdAt" : [ 2026, 11, 13, 22, 50, 6, 459623000 ],
+  "updatedAt" : [ 2026, 11, 13, 22, 50, 6, 459623000 ]
+}, {
+  "id" : "WH-003",
+  "name" : "OmniHub Distribution Center 3",
+  "location" : "Philadelphia, PA",
+  "capacitySqm" : 33377,
+  "totalZones" : 10,
+  "status" : "ACTIVE",
+  "createdAt" : [ 2026, 11, 13, 22, 50, 6, 459623000 ],
+  "updatedAt" : [ 2026, 11, 13, 22, 50, 6, 459623000 ]
+}, {
+  "id" : "WH-004",
+  "name" : "OmniHub Distribution Center 4",
+  "location" : "Atlanta, GA",
+  "capacitySqm" : 30545,
+  "totalZones" : 10,
+  "status" : "ACTIVE",
+  "createdAt" : [ 2026, 11, 13, 22, 50, 6, 459623000 ],
+  "updatedAt" : [ 2026, 11, 13, 22, 50, 6, 459623000 ]
+}, {
+  "id" : "WH-005",
+  "name" : "OmniHub Distribution Center 5",
+  "location" : "Seattle, WA",
+  "capacitySqm" : 26920,
+  "totalZones" : 10,
+  "status" : "ACTIVE",
+  "createdAt" : [ 2026, 11, 13, 22, 50, 6, 459623000 ],
+  "updatedAt" : [ 2026, 11, 13, 22, 50, 6, 459623000 ]
+}, {
+  "id" : "WH-006",
+  "name" : "OmniHub Distribution Center 6",
+  "location" : "Denver, CO",
+  "capacitySqm" : 30606,
+  "totalZones" : 10,
+  "status" : "ACTIVE",
+  "createdAt" : [ 2026, 11, 13, 22, 50, 6, 459623000 ],
+  "updatedAt" : [ 2026, 11, 13, 22, 50, 6, 459623000 ]
+}, {
+  "id" : "WH-007",
+  "name" : "OmniHub Distribution Center 7",
+  "location" : "Phoenix, AZ",
+  "capacitySqm" : 28636,
+  "totalZones" : 10,
+  "status" : "ACTIVE",
+  "createdAt" : [ 2026, 11, 13, 22, 50, 6, 459623000 ],
+  "updatedAt" : [ 2026, 11, 13, 22, 50, 6, 459623000 ]
+}, {
+  "id" : "WH-008",
+  "name" : "OmniHub Distribution Center 8",
+  "location" : "Columbus, OH",
+  "capacitySqm" : 36095,
+  "totalZones" : 10,
+  "status" : "ACTIVE",
+  "createdAt" : [ 2026, 11, 13, 22, 50, 6, 459623000 ],
+  "updatedAt" : [ 2026, 11, 13, 22, 50, 6, 459623000 ]
+}, {
+  "id" : "WH-009",
+  "name" : "OmniHub Distribution Center 9",
+  "location" : "Indianapolis, IN",
+  "capacitySqm" : 30459,
+  "totalZones" : 10,
+  "status" : "ACTIVE",
+  "createdAt" : [ 2026, 11, 13, 22, 50, 6, 459623000 ],
+  "updatedAt" : [ 2026, 11, 13, 22, 50, 6, 459623000 ]
+}, {
+  "id" : "WH-010",
+  "name" : "OmniHub Distribution Center 10",
+  "location" : "Charlotte, NC",
+  "capacitySqm" : 30465,
+  "totalZones" : 10,
+  "status" : "ACTIVE",
+  "createdAt" : [ 2026, 11, 13, 22, 50, 6, 459623000 ],
+  "updatedAt" : [ 2026, 11, 13, 22, 50, 6, 459623000 ]
+} ]

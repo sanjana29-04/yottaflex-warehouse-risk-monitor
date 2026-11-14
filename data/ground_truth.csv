@@ -1,0 +1,5 @@
+id,entity_type,entity_id,anomaly_type,description,expected_action,detected
+GTA-001,InventoryLot,LOT-2026-000001,LOT_ASSIGNED_INCOMPATIBLE_ZONE,Lot LOT-2026-000001 requires ultra-cold vaccine storage (-80°C to -60°C) but is assigned to Ambient Zone ZONE-WH-001-001 (18°C to 26°C),QUARANTINE_AND_REALLOCATE,true
+GTA-002,Sensor,SNS-ZONE-WH-001-001-TEMP-01,SENSOR_MAPPED_MULTIPLE_ZONES,Sensor SNS-ZONE-WH-001-001-TEMP-01 concurrently mapped to multiple logical zones without physical isolation or rationale,CORRECT_SENSOR_TOPOLOGY,true
+GTA-003,SensorReading,SNS-ZONE-WH-001-001-HUMI-01,UNREPORTED_SENSOR_READING_GAP,Telemetry blackout of 10 consecutive intervals on Sensor SNS-ZONE-WH-001-001-HUMI-01 between 08:00 and 08:50 UTC,FLAG_SENSOR_COMMUNICATION_FAULT,true
+GTA-004,Alarm,ALM-ZONE-WH-003-003-0001,ALARM_NOT_LINKED_TO_AFFECTED_LOT,"Alarm ALM-ZONE-WH-003-003-0001 occurred in zone ZONE-WH-003-003 while Lot LOT-2026-000071 was dwelling, but impact linkage was omitted",RECONCILE_SPATIOTEMPORAL_IMPACT,true

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: header_tags}"></head>
+<body>
+    <nav th:replace="~{layout :: sidebar('inspections')}"></nav>
+    <div id="content-wrapper">
+        <header th:replace="~{layout :: top_navbar}"></header>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h3 class="fw-bold mb-1 text-slate-800">Physical Zone Quality Inspections</h3>
+                <p class="text-secondary mb-0">Scheduled compliance audits, post-excursion physical audits and facility inspection logs</p>
+            </div>
+        </div>
+
+        <div class="table-card">
+            <div class="card-header">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-clipboard-check text-primary"></i>
+                    <span>Zone Inspection Audit Trail</span>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light small">
+                        <tr>
+                            <th>Inspection ID</th>
+                            <th>Zone</th>
+                            <th>Inspector Name</th>
+                            <th>Inspection Date</th>
+                            <th>Status</th>
+                            <th>Observations</th>
+                            <th>Findings Summary</th>
+                            <th>Action Required</th>
+                        </tr>
+                    </thead>
+                    <tbody class="small">
+                        <tr th:each="i : ${inspections.content}">
+                            <td class="fw-bold font-monospace text-primary" th:text="${i.id}">INSP-01</td>
+                            <td th:text="${i.zoneId}">ZONE-WH-001-001</td>
+                            <td class="fw-semibold" th:text="${i.inspectorName}">Lead Engineer Alex Mercer</td>
+                            <td class="text-muted" th:text="${#temporals.format(i.inspectionDate, 'yyyy-MM-dd HH:mm')}">2026-11-01 15:00</td>
+                            <td>
+                                <span class="badge-status" th:classappend="${i.status.name() == 'COMPLETED'} ? 'badge-normal' : 'badge-warning'" th:text="${i.status}">COMPLETED</span>
+                            </td>
+                            <td class="text-truncate" style="max-width: 250px;" th:text="${i.observations}" th:title="${i.observations}">Observations</td>
+                            <td class="text-truncate" style="max-width: 250px;" th:text="${i.findingsSummary != null ? i.findingsSummary : 'Pending completion'}" th:title="${i.findingsSummary}">Findings</td>
+                            <td>
+                                <span class="badge bg-danger-subtle text-danger" th:if="${i.actionRequired}"><i class="bi bi-tools me-1"></i>Remediation Required</span>
+                                <span class="badge bg-success-subtle text-success" th:unless="${i.actionRequired}">Clean Pass</span>
+                            </td>
+                        </tr>
+                        <tr th:if="${inspections.content.empty}">
+                            <td colspan="8" class="text-center py-4 text-muted">No inspections logged.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- Pagination Controls -->
+            <div class="card-footer bg-white border-top p-3 d-flex justify-content-between align-items-center" th:if="${inspections.totalPages > 1}">
+                <span class="small text-muted">Page <span th:text="${inspections.number + 1}">1</span> of <span th:text="${inspections.totalPages}">5</span></span>
+                <ul class="pagination pagination-sm mb-0">
+                    <li class="page-item" th:classappend="${inspections.first} ? 'disabled' : ''">
+                        <a class="page-link" th:href="@{/inspections(page=${inspections.number - 1})}">Previous</a>
+                    </li>
+                    <li class="page-item" th:classappend="${inspections.last} ? 'disabled' : ''">
+                        <a class="page-link" th:href="@{/inspections(page=${inspections.number + 1})}">Next</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

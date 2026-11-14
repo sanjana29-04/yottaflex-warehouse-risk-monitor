@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: header_tags}"></head>
+<body>
+    <nav th:replace="~{layout :: sidebar('sensors')}"></nav>
+    <div id="content-wrapper">
+        <header th:replace="~{layout :: top_navbar}"></header>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h3 class="fw-bold mb-1 text-slate-800">IoT Sensor Registry</h3>
+                <p class="text-secondary mb-0">Hardware telemetry nodes, calibration drift monitoring and physical zone bindings</p>
+            </div>
+            <button class="btn btn-primary btn-sm px-3" data-bs-toggle="modal" data-bs-target="#addSensorModal">
+                <i class="bi bi-plus-lg me-1"></i> Register New Sensor Node
+            </button>
+        </div>
+
+        <div class="table-card">
+            <div class="card-header">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-cpu text-primary"></i>
+                    <span>Hardware Sensor Inventory</span>
+                </div>
+                <div class="d-flex gap-2">
+                    <select class="form-select form-select-sm" onchange="location.href='/sensors?type=' + this.value">
+                        <option value="">-- All Sensor Types --</option>
+                        <option value="TEMPERATURE" th:selected="${type?.name() == 'TEMPERATURE'}">Temperature</option>
+                        <option value="HUMIDITY" th:selected="${type?.name() == 'HUMIDITY'}">Humidity</option>
+                        <option value="OCCUPANCY" th:selected="${type?.name() == 'OCCUPANCY'}">Occupancy</option>
+                        <option value="DOOR" th:selected="${type?.name() == 'DOOR'}">Door Sensor</option>
+                    </select>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light small">
+                        <tr>
+                            <th>Sensor ID</th>
+                            <th>Bound Zone</th>
+                            <th>Sensor Type</th>
+                            <th>Hardware Model</th>
+                            <th>Latest Telemetry</th>
+                            <th>Drift Offset</th>
+                            <th>Status</th>
+                            <th>Last Reading Time</th>
+                        </tr>
+                    </thead>
+                    <tbody class="small">
+                        <tr th:each="s : ${sensors.content}">
+                            <td class="fw-bold font-monospace text-primary" th:text="${s.id}">SNS-01</td>
+                            <td th:text="${s.zoneId}">ZONE-WH-001-001</td>
+                            <td>
+                                <span class="badge bg-light text-dark border" th:text="${s.sensorType}">TEMPERATURE</span>
+                            </td>
+                            <td class="text-muted" th:text="${s.modelNumber}">MOD-TEMP-v2</td>
+                            <td>
+                                <span class="fw-bold" th:text="${s.latestReadingValue != null ? s.latestReadingValue : 'N/A'}">4.2</span>
+                            </td>
+                            <td>
+                                <span class="badge" th:classappend="${s.calibrationOffset > 0.5} ? 'bg-warning text-dark' : 'bg-light text-dark border'"
+                                      th:text="${#numbers.formatDecimal(s.calibrationOffset, 1, 2)} + 'Â°'">0.00Â°</span>
+                            </td>
+                            <td>
+                                <span class="badge-status" th:classappend="${s.status.name() == 'ACTIVE'} ? 'badge-normal' : (${s.status.name() == 'CALIBRATING'} ? 'badge-warning' : 'badge-critical')" th:text="${s.status}">ACTIVE</span>
+                            </td>
+                            <td class="text-muted" th:text="${s.latestReadingTime != null ? #temporals.format(s.latestReadingTime, 'yyyy-MM-dd HH:mm:ss') : 'Pending'}">2026-11-01 14:00:00</td>
+                        </tr>
+                        <tr th:if="${sensors.content.empty}">
+                            <td colspan="8" class="text-center py-4 text-muted">No sensors registered.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Add Sensor Modal -->
+        <div class="modal fade" id="addSensorModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title fw-bold">Register IoT Telemetry Sensor</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Target Storage Zone</label>
+                            <select id="modalSensorZone" class="form-select form-select-sm">
+                                <option th:each="z : ${zones}" th:value="${z.id}" th:text="${z.name} + ' (' + ${z.id} + ')'"></option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Sensor Transducer Type</label>
+                            <select id="modalSensorType" class="form-select form-select-sm">
+                                <option value="TEMPERATURE">TEMPERATURE (RTD / Thermistor)</option>
+                                <option value="HUMIDITY">HUMIDITY (Capacitive RH)</option>
+                                <option value="OCCUPANCY">OCCUPANCY (PIR Motion Detector)</option>
+                                <option value="DOOR">DOOR (Magnetic Reed Switch)</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Hardware Model Code</label>
+                            <input type="text" id="modalSensorModel" class="form-control form-control-sm" value="MOD-IOT-SENS-v3">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Calibration Offset</label>
+                            <input type="number" id="modalSensorOffset" class="form-control form-control-sm" value="0.0" step="0.1">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="submitSensor()">Register Sensor</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function submitSensor() {
+                const zoneId = document.getElementById('modalSensorZone').value;
+                const sensorType = document.getElementById('modalSensorType').value;
+                const modelNumber = document.getElementById('modalSensorModel').value;
+                const calibrationOffset = parseFloat(document.getElementById('modalSensorOffset').value);
+
+                fetch('/api/sensors?zoneId=' + zoneId, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sensorType, status: 'ACTIVE', modelNumber, calibrationOffset })
+                }).then(() => window.location.reload());
+            }
+        </script>
+        </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

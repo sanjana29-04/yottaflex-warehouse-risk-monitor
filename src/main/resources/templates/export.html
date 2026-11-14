@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: header_tags}"></head>
+<body>
+    <nav th:replace="~{layout :: sidebar('export')}"></nav>
+    <div id="content-wrapper">
+        <header th:replace="~{layout :: top_navbar}"></header>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h3 class="fw-bold mb-1 text-slate-800">Data Export Center</h3>
+                <p class="text-secondary mb-0">Multi-format database dumps and generated telemetry streams in CSV, JSON and SQL formats</p>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- CSV Exports -->
+            <div class="col-md-4">
+                <div class="table-card h-100">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-file-earmark-spreadsheet-fill text-success fs-5"></i>
+                            <span class="fw-bold">CSV Data Exports</span>
+                        </div>
+                    </div>
+                    <div class="p-3">
+                        <p class="small text-muted">Tabular comma-separated values suitable for Excel, Pandas and downstream data lakes.</p>
+                        <div class="list-group list-group-flush small">
+                            <a href="/api/export/csv/warehouses" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                <span><i class="bi bi-building me-2 text-primary"></i> Warehouses.csv</span>
+                                <i class="bi bi-download text-muted"></i>
+                            </a>
+                            <a href="/api/export/csv/zones" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                <span><i class="bi bi-grid-3x3-gap me-2 text-info"></i> Zones.csv</span>
+                                <i class="bi bi-download text-muted"></i>
+                            </a>
+                            <a href="/api/export/csv/sensors" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                <span><i class="bi bi-cpu me-2 text-secondary"></i> Sensors.csv</span>
+                                <i class="bi bi-download text-muted"></i>
+                            </a>
+                            <a href="/api/export/csv/inventory_lots" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                <span><i class="bi bi-boxes me-2 text-purple" style="color:#9333ea;"></i> Inventory_Lots.csv</span>
+                                <i class="bi bi-download text-muted"></i>
+                            </a>
+                            <a href="/api/export/csv/alerts" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                <span><i class="bi bi-exclamation-triangle me-2 text-danger"></i> Alerts.csv</span>
+                                <i class="bi bi-download text-muted"></i>
+                            </a>
+                            <a href="/api/export/csv/ground_truth" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                <span><i class="bi bi-flag me-2 text-warning"></i> Ground_Truth.csv</span>
+                                <i class="bi bi-download text-muted"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- JSON Exports -->
+            <div class="col-md-4">
+                <div class="table-card h-100">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-filetype-json text-warning fs-5"></i>
+                            <span class="fw-bold">JSON Data Exports</span>
+                        </div>
+                    </div>
+                    <div class="p-3">
+                        <p class="small text-muted">Hierarchical structured JSON documents with full metadata and normalized relations.</p>
+                        <div class="list-group list-group-flush small">
+                            <a href="/api/export/json/warehouses" target="_blank" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                <span><i class="bi bi-building me-2 text-primary"></i> Warehouses.json</span>
+                                <i class="bi bi-box-arrow-up-right text-muted"></i>
+                            </a>
+                            <a href="/api/export/json/zones" target="_blank" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                <span><i class="bi bi-grid-3x3-gap me-2 text-info"></i> Zones.json</span>
+                                <i class="bi bi-box-arrow-up-right text-muted"></i>
+                            </a>
+                            <a href="/api/export/json/sensors" target="_blank" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                <span><i class="bi bi-cpu me-2 text-secondary"></i> Sensors.json</span>
+                                <i class="bi bi-box-arrow-up-right text-muted"></i>
+                            </a>
+                            <a href="/api/export/json/inventory_lots" target="_blank" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                <span><i class="bi bi-boxes me-2 text-purple" style="color:#9333ea;"></i> Inventory_Lots.json</span>
+                                <i class="bi bi-box-arrow-up-right text-muted"></i>
+                            </a>
+                            <a href="/api/export/json/alerts" target="_blank" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                <span><i class="bi bi-exclamation-triangle me-2 text-danger"></i> Alerts.json</span>
+                                <i class="bi bi-box-arrow-up-right text-muted"></i>
+                            </a>
+                            <a href="/api/export/json/ground_truth" target="_blank" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                <span><i class="bi bi-flag me-2 text-warning"></i> Ground_Truth.json</span>
+                                <i class="bi bi-box-arrow-up-right text-muted"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SQL Seed Dumps -->
+            <div class="col-md-4">
+                <div class="table-card h-100">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-database-fill-down text-primary fs-5"></i>
+                            <span class="fw-bold">SQL Database Dumps</span>
+                        </div>
+                    </div>
+                    <div class="p-3">
+                        <p class="small text-muted">Standard ANSI / MySQL DDL schema and batch INSERT statements for database migrations.</p>
+                        <div class="list-group list-group-flush small">
+                            <a href="/api/export/sql/warehouses" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                <span><i class="bi bi-database me-2 text-primary"></i> warehouses_seed.sql</span>
+                                <i class="bi bi-download text-muted"></i>
+                            </a>
+                            <a href="/api/export/sql/zones" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                <span><i class="bi bi-database me-2 text-info"></i> zones_seed.sql</span>
+                                <i class="bi bi-download text-muted"></i>
+                            </a>
+                            <a href="/api/export/sql/storage_requirements" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                <span><i class="bi bi-database me-2 text-success"></i> storage_requirements_seed.sql</span>
+                                <i class="bi bi-download text-muted"></i>
+                            </a>
+                            <a href="/api/export/sql/alerts" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                <span><i class="bi bi-database me-2 text-danger"></i> alerts_seed.sql</span>
+                                <i class="bi bi-download text-muted"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: header_tags}"></head>
+<body>
+    <nav th:replace="~{layout :: sidebar('doors')}"></nav>
+    <div id="content-wrapper">
+        <header th:replace="~{layout :: top_navbar}"></header>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h3 class="fw-bold mb-1 text-slate-800">Loading Dock & Access Door Monitoring</h3>
+                <p class="text-secondary mb-0">Door seal duration tracking, heat infiltration risk detection and prolonged open alerts</p>
+            </div>
+            <button class="btn btn-primary btn-sm px-3" data-bs-toggle="modal" data-bs-target="#logDoorModal">
+                <i class="bi bi-plus-lg me-1"></i> Log Door Event
+            </button>
+        </div>
+
+        <div class="table-card">
+            <div class="card-header">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-door-open text-primary"></i>
+                    <span>Access Door Open / Close Events</span>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light small">
+                        <tr>
+                            <th>Event ID</th>
+                            <th>Zone</th>
+                            <th>Door Name</th>
+                            <th>Opened Timestamp</th>
+                            <th>Closed Timestamp</th>
+                            <th>Duration</th>
+                            <th>Permitted SLA</th>
+                            <th>Status</th>
+                            <th>Alert Triggered</th>
+                        </tr>
+                    </thead>
+                    <tbody class="small">
+                        <tr th:each="d : ${doors.content}">
+                            <td class="fw-bold font-monospace text-primary" th:text="${d.id}">DEV-01</td>
+                            <td th:text="${d.zoneId}">ZONE-WH-001-001</td>
+                            <td class="fw-semibold" th:text="${d.doorName}">Dock Door 1</td>
+                            <td th:text="${#temporals.format(d.openedAt, 'yyyy-MM-dd HH:mm:ss')}">2026-11-01 10:15:00</td>
+                            <td th:text="${d.closedAt != null ? #temporals.format(d.closedAt, 'yyyy-MM-dd HH:mm:ss') : 'STILL OPEN'}">2026-11-01 10:18:20</td>
+                            <td>
+                                <span class="fw-bold" th:classappend="${d.durationSeconds != null && d.durationSeconds > d.maxPermittedSeconds} ? 'text-danger' : 'text-slate-800'"
+                                      th:text="${d.durationSeconds != null ? d.durationSeconds + 's' : 'In Progress'}">200s</span>
+                            </td>
+                            <td class="text-muted" th:text="${d.maxPermittedSeconds} + 's max'">180s max</td>
+                            <td>
+                                <span class="badge-status" th:classappend="${d.status.name() == 'NORMAL'} ? 'badge-normal' : (${d.status.name() == 'EXCEEDED_DURATION'} ? 'badge-critical' : 'badge-warning')" th:text="${d.status}">NORMAL</span>
+                            </td>
+                            <td>
+                                <span class="badge bg-danger" th:if="${d.alertTriggered}"><i class="bi bi-bell-fill me-1"></i>Alarm Active</span>
+                                <span class="badge bg-light text-muted" th:unless="${d.alertTriggered}">None</span>
+                            </td>
+                        </tr>
+                        <tr th:if="${doors.content.empty}">
+                            <td colspan="9" class="text-center py-4 text-muted">No door events recorded.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- Pagination Controls -->
+            <div class="card-footer bg-white border-top p-3 d-flex justify-content-between align-items-center" th:if="${doors.totalPages > 1}">
+                <span class="small text-muted">Page <span th:text="${doors.number + 1}">1</span> of <span th:text="${doors.totalPages}">5</span></span>
+                <ul class="pagination pagination-sm mb-0">
+                    <li class="page-item" th:classappend="${doors.first} ? 'disabled' : ''">
+                        <a class="page-link" th:href="@{/doors(page=${doors.number - 1})}">Previous</a>
+                    </li>
+                    <li class="page-item" th:classappend="${doors.last} ? 'disabled' : ''">
+                        <a class="page-link" th:href="@{/doors(page=${doors.number + 1})}">Next</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Log Door Modal -->
+        <div class="modal fade" id="logDoorModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title fw-bold">Manual Door Event Simulation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Zone</label>
+                            <select id="modalDoorZone" class="form-select form-select-sm">
+                                <option th:each="z : ${zones}" th:value="${z.id}" th:text="${z.name} + ' (' + ${z.id} + ')'"></option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Door Identifier</label>
+                            <input type="text" id="modalDoorName" class="form-control form-control-sm" value="Loading Bay Door 2">
+                        </div>
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label class="form-label small fw-semibold">Duration Open (Seconds)</label>
+                                <input type="number" id="modalDoorDuration" class="form-control form-control-sm" value="420">
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label class="form-label small fw-semibold">Max Permitted SLA (s)</label>
+                                <input type="number" id="modalDoorSla" class="form-control form-control-sm" value="180">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="submitDoorEvent()">Log Event</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function submitDoorEvent() {
+                const zoneId = document.getElementById('modalDoorZone').value;
+                const doorName = document.getElementById('modalDoorName').value;
+                const duration = parseInt(document.getElementById('modalDoorDuration').value);
+                const maxSla = parseInt(document.getElementById('modalDoorSla').value);
+
+                const now = new Date();
+                const openedAt = new Date(now.getTime() - duration * 1000).toISOString();
+                const closedAt = now.toISOString();
+
+                fetch('/api/doors?zoneId=' + zoneId + '&doorName=' + encodeURIComponent(doorName) +
+                      '&openedAt=' + openedAt + '&closedAt=' + closedAt + '&maxPermittedSeconds=' + maxSla, {
+                    method: 'POST'
+                }).then(() => window.location.reload());
+            }
+        </script>
+        </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

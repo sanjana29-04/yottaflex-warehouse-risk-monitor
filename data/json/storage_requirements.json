@@ -1,0 +1,67 @@
+[ {
+  "id" : "REQ-VACCINE",
+  "name" : "Ultra-Cold Vaccine Spec",
+  "category" : "VACCINES",
+  "tempTarget" : -70.0,
+  "tempMin" : -80.0,
+  "tempMax" : -60.0,
+  "humidityTarget" : 30.0,
+  "humidityMin" : 10.0,
+  "humidityMax" : 50.0,
+  "maxDoorOpenSeconds" : 60
+}, {
+  "id" : "REQ-DAIRY",
+  "name" : "Chilled Dairy & Protein",
+  "category" : "DAIRY",
+  "tempTarget" : 3.0,
+  "tempMin" : 1.0,
+  "tempMax" : 5.0,
+  "humidityTarget" : 65.0,
+  "humidityMin" : 50.0,
+  "humidityMax" : 80.0,
+  "maxDoorOpenSeconds" : 120
+}, {
+  "id" : "REQ-PHARMA",
+  "name" : "Controlled Pharma Ambient",
+  "category" : "PHARMACEUTICAL",
+  "tempTarget" : 20.0,
+  "tempMin" : 15.0,
+  "tempMax" : 25.0,
+  "humidityTarget" : 45.0,
+  "humidityMin" : 30.0,
+  "humidityMax" : 60.0,
+  "maxDoorOpenSeconds" : 180
+}, {
+  "id" : "REQ-PRODUCE",
+  "name" : "Fresh Agricultural Produce",
+  "category" : "PRODUCE",
+  "tempTarget" : 8.0,
+  "tempMin" : 4.0,
+  "tempMax" : 12.0,
+  "humidityTarget" : 85.0,
+  "humidityMin" : 75.0,
+  "humidityMax" : 95.0,
+  "maxDoorOpenSeconds" : 240
+}, {
+  "id" : "REQ-ELEC",
+  "name" : "Electronics Dry Storage",
+  "category" : "ELECTRONICS",
+  "tempTarget" : 20.0,
+  "tempMin" : 15.0,
+  "tempMax" : 30.0,
+  "humidityTarget" : 40.0,
+  "humidityMin" : 20.0,
+  "humidityMax" : 60.0,
+  "maxDoorOpenSeconds" : 300
+}, {
+  "id" : "REQ-AMBIENT",
+  "name" : "Standard Ambient Dry Goods",
+  "category" : "GENERAL_MERCHANDISE",
+  "tempTarget" : 22.0,
+  "tempMin" : 10.0,
+  "tempMax" : 30.0,
+  "humidityTarget" : 50.0,
+  "humidityMin" : 20.0,
+  "humidityMax" : 70.0,
+  "maxDoorOpenSeconds" : 300
+} ]

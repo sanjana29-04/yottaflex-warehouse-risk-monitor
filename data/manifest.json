@@ -1,0 +1,79 @@
+{
+  "generator" : "YottaFlex-WarehouseMonitoringSystem-v1.0.0",
+  "project" : "YottaFlex Warehouse Monitoring System",
+  "seed" : 20261022,
+  "prng" : "Mulberry32",
+  "benchmarkCounts" : {
+    "warehouses" : 10,
+    "zones" : 100,
+    "sensors" : 500,
+    "sensorZoneMappings" : 501,
+    "storageRequirements" : 6,
+    "inventoryLots" : 10000,
+    "lotZoneAssignments" : 10000,
+    "sensorReadings" : 1000000,
+    "doorEvents" : 1047,
+    "alerts" : 100,
+    "alarmLotImpacts" : 9999,
+    "inspections" : 100,
+    "remediations" : 100,
+    "groundTruthAnomalies" : 4
+  },
+  "nomenclature" : {
+    "warehouse" : "WH-001",
+    "zone" : "ZONE-WH-001-001",
+    "sensor" : "SNS-ZONE-WH-001-001-TEMP-01",
+    "reading" : "RDG-SENSOR-ID-TIMESTAMP",
+    "lot" : "LOT-2026-000001",
+    "door" : "DEV-ZONE-ID-SEQUENCE",
+    "alert" : "ALM-ZONE-ID-SEQUENCE"
+  },
+  "negativeScenarios" : [ {
+    "id" : "GTA-001",
+    "entityType" : "InventoryLot",
+    "entityId" : "LOT-2026-000001",
+    "anomalyType" : "LOT_ASSIGNED_INCOMPATIBLE_ZONE",
+    "injectedAt" : [ 2026, 11, 1, 2, 0 ],
+    "description" : "Lot LOT-2026-000001 requires ultra-cold vaccine storage (-80°C to -60°C) but is assigned to Ambient Zone ZONE-WH-001-001 (18°C to 26°C)",
+    "expectedAction" : "QUARANTINE_AND_REALLOCATE",
+    "detected" : true,
+    "detectionLatencyMinutes" : 5.0
+  }, {
+    "id" : "GTA-002",
+    "entityType" : "Sensor",
+    "entityId" : "SNS-ZONE-WH-001-001-TEMP-01",
+    "anomalyType" : "SENSOR_MAPPED_MULTIPLE_ZONES",
+    "injectedAt" : [ 2026, 11, 1, 4, 0 ],
+    "description" : "Sensor SNS-ZONE-WH-001-001-TEMP-01 concurrently mapped to multiple logical zones without physical isolation or rationale",
+    "expectedAction" : "CORRECT_SENSOR_TOPOLOGY",
+    "detected" : true,
+    "detectionLatencyMinutes" : 3.5
+  }, {
+    "id" : "GTA-003",
+    "entityType" : "SensorReading",
+    "entityId" : "SNS-ZONE-WH-001-001-HUMI-01",
+    "anomalyType" : "UNREPORTED_SENSOR_READING_GAP",
+    "injectedAt" : [ 2026, 11, 1, 8, 0 ],
+    "description" : "Telemetry blackout of 10 consecutive intervals on Sensor SNS-ZONE-WH-001-001-HUMI-01 between 08:00 and 08:50 UTC",
+    "expectedAction" : "FLAG_SENSOR_COMMUNICATION_FAULT",
+    "detected" : true,
+    "detectionLatencyMinutes" : 4.0
+  }, {
+    "id" : "GTA-004",
+    "entityType" : "Alarm",
+    "entityId" : "ALM-ZONE-WH-003-003-0001",
+    "anomalyType" : "ALARM_NOT_LINKED_TO_AFFECTED_LOT",
+    "injectedAt" : [ 2026, 11, 1, 12, 0 ],
+    "description" : "Alarm ALM-ZONE-WH-003-003-0001 occurred in zone ZONE-WH-003-003 while Lot LOT-2026-000071 was dwelling, but impact linkage was omitted",
+    "expectedAction" : "RECONCILE_SPATIOTEMPORAL_IMPACT",
+    "detected" : true,
+    "detectionLatencyMinutes" : 4.5
+  } ],
+  "validation" : {
+    "totalRules" : 50,
+    "status" : "PASSED",
+    "evaluationPrecision" : 1.0,
+    "evaluationRecall" : 1.0,
+    "evaluationF1" : 1.0
+  }
+}

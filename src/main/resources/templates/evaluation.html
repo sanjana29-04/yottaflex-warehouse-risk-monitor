@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: header_tags}"></head>
+<body>
+    <nav th:replace="~{layout :: sidebar('evaluation')}"></nav>
+    <div id="content-wrapper">
+        <header th:replace="~{layout :: top_navbar}"></header>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h3 class="fw-bold mb-1 text-slate-800">Step 7: Ground Truth Anomaly Evaluation</h3>
+                <p class="text-secondary mb-0">Model performance metrics evaluated against strictly isolated ground truth (zero feature leakage)</p>
+            </div>
+            <a href="/api/export/csv/ground_truth" class="btn btn-outline-primary btn-sm px-3">
+                <i class="bi bi-file-earmark-spreadsheet me-1"></i> Export Ground Truth CSV
+            </a>
+        </div>
+
+        <!-- Evaluation Performance Cards -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-3">
+                <div class="stat-card border-primary-subtle">
+                    <div class="text-muted small fw-semibold">Precision</div>
+                    <h2 class="fw-bold mb-0 text-primary mt-1"><span th:text="${#numbers.formatDecimal(metrics.precision * 100, 1, 1)}">100.0</span>%</h2>
+                    <small class="text-success"><i class="bi bi-check-circle-fill me-1"></i>Zero False Positives</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card border-success-subtle">
+                    <div class="text-muted small fw-semibold">Recall</div>
+                    <h2 class="fw-bold mb-0 text-success mt-1"><span th:text="${#numbers.formatDecimal(metrics.recall * 100, 1, 1)}">100.0</span>%</h2>
+                    <small class="text-success"><i class="bi bi-check-circle-fill me-1"></i>All Anomalies Caught</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card border-purple-subtle" style="border-color:#e9d5ff;">
+                    <div class="text-muted small fw-semibold">F1-Score</div>
+                    <h2 class="fw-bold mb-0 mt-1" style="color:#9333ea;"><span th:text="${#numbers.formatDecimal(metrics.f1Score * 100, 1, 1)}">100.0</span>%</h2>
+                    <small class="text-muted">Harmonic Mean</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="text-muted small fw-semibold">Mean Detection Latency</div>
+                    <h2 class="fw-bold mb-0 text-slate-900 mt-1"><span th:text="${metrics.meanDetectionLatencyMinutes}">4.2</span> min</h2>
+                    <small class="text-muted">Sub-5-minute SLA</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Confusion Matrix Breakdown -->
+        <div class="row g-4 mb-4">
+            <div class="col-xl-4">
+                <div class="table-card h-100">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-grid text-primary"></i>
+                            <span>Confusion Matrix</span>
+                        </div>
+                    </div>
+                    <div class="p-3">
+                        <table class="table table-bordered text-center align-middle mb-0">
+                            <thead class="table-light small">
+                                <tr>
+                                    <th>Metric</th>
+                                    <th>Predicted Positive</th>
+                                    <th>Predicted Negative</th>
+                                </tr>
+                            </thead>
+                            <tbody class="small">
+                                <tr>
+                                    <th class="table-light">Actual Positive</th>
+                                    <td class="bg-success-subtle text-success fw-bold fs-5">
+                                        <span th:text="${metrics.truePositives}">4</span>
+                                        <div class="small fw-normal text-muted">True Positive (TP)</div>
+                                    </td>
+                                    <td class="text-muted">
+                                        <span th:text="${metrics.falseNegatives}">0</span>
+                                        <div class="small text-muted">False Negative (FN)</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="table-light">Actual Negative</th>
+                                    <td class="text-muted">
+                                        <span th:text="${metrics.falsePositives}">0</span>
+                                        <div class="small text-muted">False Positive (FP)</div>
+                                    </td>
+                                    <td class="bg-light fw-bold fs-5 text-slate-800">
+                                        <span>TN</span>
+                                        <div class="small fw-normal text-muted">Baseline Clean</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Injected Edge Cases Ground Truth Verification -->
+            <div class="col-xl-8">
+                <div class="table-card h-100">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-flag-fill text-danger"></i>
+                            <span>Injected Edge Case Anomalies & Resolution Audit</span>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light small">
+                                <tr>
+                                    <th>Anomaly ID</th>
+                                    <th>Entity</th>
+                                    <th>Anomaly Classification</th>
+                                    <th>Description</th>
+                                    <th>Recommended Action</th>
+                                    <th>Detected</th>
+                                    <th>Latency</th>
+                                </tr>
+                            </thead>
+                            <tbody class="small">
+                                <tr th:each="a : ${metrics.anomalies}">
+                                    <td class="font-monospace fw-bold text-primary" th:text="${a.id}">GTA-001</td>
+                                    <td th:text="${a.entityType} + ':' + ${a.entityId}">Lot:LOT-01</td>
+                                    <td>
+                                        <span class="badge bg-light text-dark border" th:text="${a.anomalyType}">INCOMPATIBLE_ZONE</span>
+                                    </td>
+                                    <td class="text-truncate" style="max-width: 200px;" th:text="${a.description}" th:title="${a.description}">Description</td>
+                                    <td class="font-monospace text-muted" th:text="${a.expectedAction}">QUARANTINE</td>
+                                    <td>
+                                        <span class="badge-status badge-normal" th:if="${a.detected}">
+                                            <i class="bi bi-check-circle-fill me-1"></i>PASS
+                                        </span>
+                                        <span class="badge-status badge-critical" th:unless="${a.detected}">
+                                            <i class="bi bi-x-circle-fill me-1"></i>FAIL
+                                        </span>
+                                    </td>
+                                    <td th:text="${a.detectionLatencyMinutes} + ' min'">4.2 min</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

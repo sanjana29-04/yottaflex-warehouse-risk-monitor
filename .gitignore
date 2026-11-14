@@ -1,0 +1,26 @@
+# Maven & Java Build Artifacts
+target/
+*.class
+
+# Environment and Logs
+*.log
+.env
+.env.local
+
+# OS & IDE Files
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Large Generated Datasets (>100 MiB GitHub File Limit)
+# Recreate full 1M datasets at any time using: mvn test -Dtest=GenerateFullDatasetRunner
+data/csv/sensor_readings.csv
+data/json/sensor_readings.json
+data/sql/sensor_readings.sql
+data/h2/
+data/large_runs/
+

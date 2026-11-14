@@ -1,0 +1,7 @@
+id,name,category,temp_target,temp_min,temp_max,humidity_target,humidity_min,humidity_max,max_door_open_seconds
+REQ-VACCINE,Ultra-Cold Vaccine Spec,VACCINES,-70.0,-80.0,-60.0,30.0,10.0,50.0,60
+REQ-DAIRY,Chilled Dairy & Protein,DAIRY,3.0,1.0,5.0,65.0,50.0,80.0,120
+REQ-PHARMA,Controlled Pharma Ambient,PHARMACEUTICAL,20.0,15.0,25.0,45.0,30.0,60.0,180
+REQ-PRODUCE,Fresh Agricultural Produce,PRODUCE,8.0,4.0,12.0,85.0,75.0,95.0,240
+REQ-ELEC,Electronics Dry Storage,ELECTRONICS,20.0,15.0,30.0,40.0,20.0,60.0,300
+REQ-AMBIENT,Standard Ambient Dry Goods,GENERAL_MERCHANDISE,22.0,10.0,30.0,50.0,20.0,70.0,300

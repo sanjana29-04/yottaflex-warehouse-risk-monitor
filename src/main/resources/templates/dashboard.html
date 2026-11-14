@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: header_tags}"></head>
+<body>
+    <nav th:replace="~{layout :: sidebar('dashboard')}"></nav>
+    <div id="content-wrapper">
+        <header th:replace="~{layout :: top_navbar}"></header>
+        <!-- Dashboard Title & Quick Stats -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h3 class="fw-bold mb-1 text-slate-800">Executive Environmental Dashboard</h3>
+                <p class="text-secondary mb-0">Multi-zone cold-chain monitoring, spatiotemporal lot traceability & automated risk dispatch</p>
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-primary btn-sm px-3" onclick="location.reload()">
+                    <i class="bi bi-arrow-clockwise me-1"></i> Refresh Real-Time
+                </button>
+                <a href="/alerts" class="btn btn-outline-danger btn-sm px-3">
+                    <i class="bi bi-bell-fill me-1"></i> View <span th:text="${stats.activeAlerts}">0</span> Alerts
+                </a>
+            </div>
+        </div>
+
+        <!-- 8 Executive Stat Cards -->
+        <div class="row g-3 mb-4">
+            <div class="col-xl-3 col-md-6">
+                <div class="stat-card d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-muted small fw-semibold text-uppercase">Total Warehouses</div>
+                        <h2 class="fw-bold mb-0 text-slate-900 mt-1" th:text="${stats.totalWarehouses}">10</h2>
+                        <small class="text-success"><i class="bi bi-check-circle-fill me-1"></i>100% Monitored</small>
+                    </div>
+                    <div class="stat-icon bg-primary-subtle text-primary">
+                        <i class="bi bi-building"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="stat-card d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-muted small fw-semibold text-uppercase">Total Zones</div>
+                        <h2 class="fw-bold mb-0 text-slate-900 mt-1" th:text="${stats.totalZones}">100</h2>
+                        <small class="text-secondary"><span th:text="${stats.normalZones}">0</span> Normal / <span th:text="${stats.attentionZones}">0</span> Attention</small>
+                    </div>
+                    <div class="stat-icon bg-info-subtle text-info">
+                        <i class="bi bi-grid-3x3-gap-fill"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="stat-card d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-muted small fw-semibold text-uppercase">Active Sensors</div>
+                        <h2 class="fw-bold mb-0 text-slate-900 mt-1" th:text="${stats.totalSensors}">500</h2>
+                        <small class="text-success"><i class="bi bi-broadcast me-1"></i>Streaming Telemetry</small>
+                    </div>
+                    <div class="stat-icon bg-success-subtle text-success">
+                        <i class="bi bi-cpu-fill"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="stat-card d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-muted small fw-semibold text-uppercase">Inventory Lots</div>
+                        <h2 class="fw-bold mb-0 text-slate-900 mt-1" th:text="${stats.totalLots}">10,000</h2>
+                        <small class="text-danger fw-semibold" th:if="${stats.compromisedLots > 0}">
+                            <i class="bi bi-shield-slash-fill me-1"></i><span th:text="${stats.compromisedLots}">0</span> At Risk
+                        </small>
+                        <small class="text-success" th:unless="${stats.compromisedLots > 0}">
+                            <i class="bi bi-shield-check me-1"></i>Safe & Compliant
+                        </small>
+                    </div>
+                    <div class="stat-icon bg-purple-subtle text-purple" style="background:#f3e8ff; color:#9333ea;">
+                        <i class="bi bi-boxes"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="stat-card d-flex align-items-center justify-content-between border-danger-subtle">
+                    <div>
+                        <div class="text-muted small fw-semibold text-uppercase">Active Alerts</div>
+                        <h2 class="fw-bold mb-0 text-danger mt-1" th:text="${stats.activeAlerts}">0</h2>
+                        <small class="text-danger fw-medium"><span th:text="${stats.criticalAlerts}">0</span> Critical Risk</small>
+                    </div>
+                    <div class="stat-icon bg-danger-subtle text-danger">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="stat-card d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-muted small fw-semibold text-uppercase">Normal Zones</div>
+                        <h2 class="fw-bold mb-0 text-success mt-1" th:text="${stats.normalZones}">0</h2>
+                        <small class="text-muted">Within SLA thresholds</small>
+                    </div>
+                    <div class="stat-icon bg-success-subtle text-success">
+                        <i class="bi bi-check2-circle"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="stat-card d-flex align-items-center justify-content-between border-warning-subtle">
+                    <div>
+                        <div class="text-muted small fw-semibold text-uppercase">Zones Requiring Attention</div>
+                        <h2 class="fw-bold mb-0 text-warning mt-1" th:text="${stats.attentionZones}">0</h2>
+                        <small class="text-warning fw-medium">Excursions or Drift</small>
+                    </div>
+                    <div class="stat-icon bg-warning-subtle text-warning">
+                        <i class="bi bi-thermometer-high"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="stat-card d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-muted small fw-semibold text-uppercase">Remediation Cost Impact</div>
+                        <h2 class="fw-bold mb-0 text-slate-800 mt-1">$<span th:text="${#numbers.formatDecimal(stats.totalRemediationCost, 1, 'COMMA', 2, 'POINT')}">0.00</span></h2>
+                        <small class="text-muted">Total allocated repairs</small>
+                    </div>
+                    <div class="stat-icon bg-secondary-subtle text-secondary">
+                        <i class="bi bi-currency-dollar"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row 1: Temperature Multi-Zone Trend & Risk Distribution -->
+        <div class="row g-3 mb-4">
+            <div class="col-xl-8">
+                <div class="table-card h-100">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-graph-up text-primary"></i>
+                            <span>Zone Environmental Telemetry Timeline (Temperature & Excursion Bands)</span>
+                        </div>
+                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle">Real-Time Chart.js</span>
+                    </div>
+                    <div class="p-3">
+                        <canvas id="tempChart" style="height: 280px; width: 100%;"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-4">
+                <div class="table-card h-100">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-pie-chart text-danger"></i>
+                            <span>Risk Level Distribution</span>
+                        </div>
+                    </div>
+                    <div class="p-3 d-flex flex-column align-items-center justify-content-center">
+                        <div style="height: 230px; width: 100%;">
+                            <canvas id="riskPieChart"></canvas>
+                        </div>
+                        <div class="small text-muted mt-2 text-center">Active & In-Progress Alert Severity Ratios</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row 2: Humidity Timeline & Sensor Distribution -->
+        <div class="row g-3 mb-4">
+            <div class="col-xl-6">
+                <div class="table-card h-100">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-droplet-half text-info"></i>
+                            <span>Humidity Monitoring (%) vs Permitted Envelope</span>
+                        </div>
+                    </div>
+                    <div class="p-3">
+                        <canvas id="humChart" style="height: 220px; width: 100%;"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-6">
+                <div class="table-card h-100">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-people-fill text-warning"></i>
+                            <span>Zone Occupancy & Door Open Events Activity</span>
+                        </div>
+                    </div>
+                    <div class="p-3">
+                        <canvas id="occChart" style="height: 220px; width: 100%;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Alerts & Telemetry Tables Row -->
+        <div class="row g-3">
+            <!-- Recent Alerts -->
+            <div class="col-xl-7">
+                <div class="table-card mb-0">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-exclamation-octagon text-danger"></i>
+                            <span>Recent Environmental Alerts & Risk Conditions</span>
+                        </div>
+                        <a href="/alerts" class="btn btn-sm btn-link text-decoration-none">View All <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light small">
+                                <tr>
+                                    <th>Alert ID</th>
+                                    <th>Zone</th>
+                                    <th>Type</th>
+                                    <th>Severity</th>
+                                    <th>Value</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="small">
+                                <tr th:each="alert : ${stats.recentAlerts}">
+                                    <td class="fw-bold font-monospace" th:text="${alert.id}">ALM-001</td>
+                                    <td th:text="${alert.zoneId}">ZONE-WH-001-001</td>
+                                    <td>
+                                        <span class="badge bg-light text-dark border" th:text="${alert.alertType}">HIGH_TEMPERATURE</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge" th:classappend="${alert.riskLevel.name() == 'CRITICAL'} ? 'bg-danger' : (${alert.riskLevel.name() == 'HIGH'} ? 'bg-warning text-dark' : 'bg-info text-dark')" th:text="${alert.riskLevel}">CRITICAL</span>
+                                    </td>
+                                    <td>
+                                        <span class="fw-semibold text-danger" th:text="${alert.triggerValue} + 'Â°C'">12.4Â°C</span>
+                                        <small class="text-muted">(max: <span th:text="${alert.thresholdValue}">8.0</span>)</small>
+                                    </td>
+                                    <td>
+                                        <span class="badge-status" th:classappend="${alert.status.name() == 'OPEN'} ? 'badge-critical' : (${alert.status.name() == 'ACKNOWLEDGED'} ? 'badge-warning' : 'badge-normal')" th:text="${alert.status}">OPEN</span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-xs btn-outline-primary btn-sm py-0 px-2" th:data-id="${alert.id}" onclick="ackAlert(this.getAttribute('data-id'))" th:if="${alert.status.name() == 'OPEN'}">
+                                            Acknowledge
+                                        </button>
+                                        <button class="btn btn-xs btn-outline-success btn-sm py-0 px-2" th:data-id="${alert.id}" onclick="resolveAlert(this.getAttribute('data-id'))" th:unless="${alert.status.name() == 'RESOLVED'}">
+                                            Resolve
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr th:if="${stats.recentAlerts == null || stats.recentAlerts.empty}">
+                                    <td colspan="7" class="text-center py-4 text-muted">
+                                        <i class="bi bi-shield-check fs-2 text-success d-block mb-1"></i>
+                                        No active environmental alerts detected. All warehouse zones within tolerance.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Telemetry Stream -->
+            <div class="col-xl-5">
+                <div class="table-card mb-0">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-broadcast text-primary"></i>
+                            <span>Live Telemetry Feed (Step 4 Stream)</span>
+                        </div>
+                        <a href="/readings" class="btn btn-sm btn-link text-decoration-none">Telemetry Explorer <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light small">
+                                <tr>
+                                    <th>Sensor</th>
+                                    <th>Type</th>
+                                    <th>Value</th>
+                                    <th>Timestamp</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="small">
+                                <tr th:each="r : ${stats.recentReadings}">
+                                    <td class="font-monospace text-truncate" style="max-width: 140px;" th:text="${r.sensorId}">SNS-01</td>
+                                    <td th:text="${r.readingType}">TEMP</td>
+                                    <td class="fw-bold" th:text="${r.value} + ' ' + ${r.unit}">4.2 Â°C</td>
+                                    <td class="text-muted" th:text="${#temporals.format(r.timestamp, 'HH:mm:ss')}">14:22:00</td>
+                                    <td>
+                                        <span class="badge-status" th:classappend="${r.status.name() == 'EXCURSION'} ? 'badge-critical' : (${r.status.name() == 'OUTLIER'} ? 'badge-warning' : 'badge-normal')" th:text="${r.status}">NORMAL</span>
+                                    </td>
+                                </tr>
+                                <tr th:if="${stats.recentReadings == null || stats.recentReadings.empty}">
+                                    <td colspan="5" class="text-center py-4 text-muted">No readings available.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart.js Initializations & Alert Quick-Action Handlers -->
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                // Fetch TimeSeries Data from REST API
+                fetch('/api/readings/timeseries?type=TEMPERATURE')
+                    .then(res => res.json())
+                    .then(data => {
+                        const labels = data.map(d => new Date(d.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+                        const values = data.map(d => d.value);
+
+                        const ctx = document.getElementById('tempChart').getContext('2d');
+                        new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: 'Temperature (Â°C)',
+                                    data: values,
+                                    borderColor: '#3b82f6',
+                                    backgroundColor: 'rgba(59, 130, 246, 0.08)',
+                                    fill: true,
+                                    tension: 0.35,
+                                    pointRadius: 2,
+                                    pointHoverRadius: 5
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: {
+                                    y: {
+                                        title: { display: true, text: 'Temperature (Â°C)' }
+                                    }
+                                }
+                            }
+                        });
+                    });
+
+                // Humidity Chart
+                fetch('/api/readings/timeseries?type=HUMIDITY')
+                    .then(res => res.json())
+                    .then(data => {
+                        const labels = data.map(d => new Date(d.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+                        const values = data.map(d => d.value);
+
+                        const ctx = document.getElementById('humChart').getContext('2d');
+                        new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: 'Relative Humidity (%)',
+                                    data: values,
+                                    borderColor: '#06b6d4',
+                                    backgroundColor: 'rgba(6, 182, 212, 0.08)',
+                                    fill: true,
+                                    tension: 0.35,
+                                    pointRadius: 2
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: {
+                                    y: { min: 20, max: 100, title: { display: true, text: 'RH (%)' } }
+                                }
+                            }
+                        });
+                    });
+
+                // Occupancy Chart
+                fetch('/api/readings/timeseries?type=OCCUPANCY')
+                    .then(res => res.json())
+                    .then(data => {
+                        const labels = data.map(d => new Date(d.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+                        const values = data.map(d => d.value);
+
+                        const ctx = document.getElementById('occChart').getContext('2d');
+                        new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: 'Zone Personnel Count',
+                                    data: values,
+                                    backgroundColor: '#f59e0b',
+                                    borderRadius: 4
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: {
+                                    y: { beginAtZero: true, title: { display: true, text: 'Personnel Count' } }
+                                }
+                            }
+                        });
+                    });
+
+                // Risk Pie Chart
+                const pieCtx = document.getElementById('riskPieChart').getContext('2d');
+                new Chart(pieCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Critical', 'High', 'Medium', 'Low'],
+                        datasets: [{
+                            data: [
+                                [[${stats.riskDistribution['CRITICAL'] != null ? stats.riskDistribution['CRITICAL'] : 0}]],
+                                [[${stats.riskDistribution['HIGH'] != null ? stats.riskDistribution['HIGH'] : 0}]],
+                                [[${stats.riskDistribution['MEDIUM'] != null ? stats.riskDistribution['MEDIUM'] : 0}]],
+                                [[${stats.riskDistribution['LOW'] != null ? stats.riskDistribution['LOW'] : 0}]]
+                            ],
+                            backgroundColor: ['#ef4444', '#f59e0b', '#3b82f6', '#10b981']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom' }
+                        }
+                    }
+                });
+            });
+
+            function ackAlert(id) {
+                fetch('/api/alerts/' + id + '/acknowledge', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user: 'Lead Operator', notes: 'Operator acknowledged excursion' })
+                }).then(() => location.reload());
+            }
+
+            function resolveAlert(id) {
+                fetch('/api/alerts/' + id + '/resolve', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user: 'Quality Engineer', notes: 'Thermal parameters restored to SLA' })
+                }).then(() => location.reload());
+            }
+        </script>
+        </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

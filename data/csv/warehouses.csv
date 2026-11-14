@@ -1,0 +1,11 @@
+id,name,location,capacity_sqm,total_zones,status
+WH-001,OmniHub Distribution Center 1,"Chicago, IL",33387,10,ACTIVE
+WH-002,OmniHub Distribution Center 2,"Dallas, TX",28282,10,ACTIVE
+WH-003,OmniHub Distribution Center 3,"Philadelphia, PA",33377,10,ACTIVE
+WH-004,OmniHub Distribution Center 4,"Atlanta, GA",30545,10,ACTIVE
+WH-005,OmniHub Distribution Center 5,"Seattle, WA",26920,10,ACTIVE
+WH-006,OmniHub Distribution Center 6,"Denver, CO",30606,10,ACTIVE
+WH-007,OmniHub Distribution Center 7,"Phoenix, AZ",28636,10,ACTIVE
+WH-008,OmniHub Distribution Center 8,"Columbus, OH",36095,10,ACTIVE
+WH-009,OmniHub Distribution Center 9,"Indianapolis, IN",30459,10,ACTIVE
+WH-010,OmniHub Distribution Center 10,"Charlotte, NC",30465,10,ACTIVE
